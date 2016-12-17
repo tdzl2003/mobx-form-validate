@@ -27,7 +27,7 @@ This will also add a computed field named 'isValid', whether this form has no va
 
 ```js
 import {observable, computed} from 'mobx';
-import validate from '../../../utils/validate';
+import validate from 'mobx-form-validate';
 import Session from '../../../logics/session';
 
 export default class LoginForm {
