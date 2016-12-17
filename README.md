@@ -159,3 +159,48 @@ export default class Login extends React.Component {
   }
 }
 ```
+
+### Sub-form
+
+You can create sub-form or even sub-form list in your form:
+
+```js
+class SubForm {
+  @observable
+  @validate(/.+/)
+  field1 = '';
+  
+  @observable
+  @validate(/.+/)
+  field2 = '';
+}
+
+class Item {
+  @observable
+  @validate(/.+/)
+  field3 = '';
+}
+
+class MainForm {
+  @observable
+  haveSubForm = false;
+    
+  @observable
+  @validate((value, this)=>this.haveSubForm && value.validationError)
+  subForm = new SubForm();
+  
+  @observable
+  @validate((value) => value.map(v=>v.validationError).find(v=>v))
+  itemList = [];
+  
+  @action
+  addItem() {
+    this.itemList.push(new Item());
+  }
+  
+  @action
+  clearItem() {
+    this.itemList.clear();
+  }
+}
+```
