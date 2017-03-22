@@ -14,6 +14,25 @@ function defineComputedProperty(target, name, descriptor){
   computed(target, name, descriptor);
 }
 
+// Add by PizzaLiu on 2017-03-22 for reg array and msg array.
+function validateFunc(reg, msg) {
+  const errMsg = 'ValidationError';
+  if (Array.isArray(reg)) {
+    if (reg.length == 1) {
+      reg = reg[0];
+      msg = msg[0];
+    } else {
+      return function (value) {
+        return reg[0].test(value) ? (validateFunc(reg.slice(1), msg.slice(1)))(value) : msg[0] || errMsg;
+      };
+    }
+  }
+
+  return reg.test
+    ? (value=>reg.test(value)?undefined:(msg||errMsg))
+    : reg;
+}
+
 export function getValidateError() {
   return this.constructor.__validateFields.find(key =>this[key]);
 }
@@ -23,9 +42,7 @@ export function getIsValid() {
 }
 
 export default function validate(reg, msg){
-  const test = reg.test
-    ? (value=>reg.test(value)?undefined:(msg||'ValidationError'))
-    : reg;
+  const test = validateFunc(reg, msg);
 
   return function (target, name, args){
     const validateName = camelCase('validateError', name);
