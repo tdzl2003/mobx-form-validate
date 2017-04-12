@@ -3,7 +3,7 @@
  */
 
 import {computed} from 'mobx';
-import camelCase from "camelcase";
+import camelCase from "easy-camelcase";
 
 function defineComputedProperty(target, name, descriptor){
   Object.defineProperty(
